@@ -1,10 +1,11 @@
 import { calcTotal, renderCart, renderMenu, renderText } from "./render.js";
+import { submitToGoogleForm } from "./statistics.js";
 import { sendBot } from './telegram.js';
-import { waitTable } from "./statistics.js";
 
 let isNeedToPay = false;
 let formattedCart = '';
 let userFormattedCart = '';
+let isPayed = false;
 const cartButton = document.querySelector('.nav__cart');
 const cart = document.querySelector('.cart');
 const navTheme = document.querySelector('.nav__theme');
@@ -106,7 +107,6 @@ if (!sessionStorage.getItem(data.name + '-table')) {
     buttons[ok] = function () {
         sessionStorage.setItem(data.name + '-table', input.value);
         tablePopup.closePopup();
-        waitTable();
     };
 
     tablePopup.createButtons(buttons);
@@ -451,6 +451,16 @@ ${(oldDishes + x + newCart).split('+==+').join('')}
         isPayed = true;
         let nofficationPopup = createPopup(forJsData.payOrdered);
         let btns = {};
+        let ord = JSON.parse(localStorage.getItem(data.name + '-order'));
+
+        submitToGoogleForm({
+            [formStore['id']]: ord.id,
+            [formStore['оплата']]: 'Оплата',
+            [formStore['lang']]: data.language,
+            [formStore['table']]: sessionStorage.getItem(data.name + '-table'),
+            [formStore['order']]: ord.formatted.split('+==+').join(''),
+            [formStore['sum']]: calcTotal(),
+        });
         btns[forJsData.understand] = nofficationPopup.closePopup;
         btns[cancel] = function () {
             sendBot(`

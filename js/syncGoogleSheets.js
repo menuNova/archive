@@ -101,7 +101,7 @@ function processData(dataX) {
             dishData[categoryKey].items.push(dish);
             size++;
             if (item['action-' + data.mainLang] != data.mainMenu) {
-                const actionKey = '~' + textToId(item[`action-${data.mainLang}`]);
+                const actionKey = 'X0-' + textToId(item[`action-${data.mainLang}`]);
                 if (!dishData[actionKey]) dishData[actionKey] = {name: transformItem(item, 'action'), items: []};
                 dishData[actionKey].items.push(dish);
             };

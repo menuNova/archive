@@ -138,7 +138,7 @@ export function renderMenu() {
         section.appendChild(dishesList);
         if (section.querySelector('.card')) {
             navContainer.appendChild(navLink);
-            if (categoryKey.startsWith('~')) {
+            if (categoryKey.startsWith('X0-')) {
                 section.classList.add('_action');
                 dishesContainer.insertBefore(section, navContainer.nextSibling)
             } else dishesContainer.appendChild(section);
