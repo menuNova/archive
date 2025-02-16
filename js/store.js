@@ -1,4 +1,4 @@
-export let data = {
+let data = {
     valute: '$',
     language: document.documentElement.lang,
     mainLang: 'ru',
@@ -8,16 +8,16 @@ export let data = {
     mainMenu: 'Основное',
 };
 
-export let indexData = [
+let indexData = [
     ['.page__title', 'shakespeare'],
     ['.page__subtitle', 'coffee & bistro'],
 ];
 
-export let payData = {
+let payData = {
     totalPrice: 0,
 };
 
-export let languageData = {
+let languageData = {
     ru: {
         'title': 'Меню | ' + data.name,
         '#menuTitle': 'Меню',
@@ -116,7 +116,7 @@ export let languageData = {
 };
 
 
-export function textToId(text) {
+function textToId(text) {
     return text
         .normalize('NFKD') // Приводим символы к нормальной форме
         .replace(/[\u0400-\u04FF\u0500-\u052F\u1E00-\u1EFF]/g, match => {
@@ -129,7 +129,7 @@ export function textToId(text) {
 };
 
 
-export let dishesData = {
+let dishesData = {
     'category1': {
         name: {
             ru: 'Основные блюда',
@@ -353,15 +353,15 @@ export let dishesData = {
 };
 
 
-export let setDishesData = function (newData) {
+let setDishesData = function (newData) {
     dishesData = newData;
 };
 
-export let getDishesData = function () {
+let getDishesData = function () {
     return dishesData;
 };
 
-export let setLastOrder = function (newLastOrder, isNew = true) {
+let setLastOrder = function (newLastOrder, isNew = true) {
     lastOrder = newLastOrder;
     if (newLastOrder != 'delete') {
         allLasts.push(lastOrder);
@@ -373,11 +373,11 @@ export let setLastOrder = function (newLastOrder, isNew = true) {
     localStorage.setItem(data.name + '-lastS', JSON.stringify(lastOrder));
 };
 
-export let cartData = {};
-export let lastOrder = -1;
-export let allLasts = [];
+let cartData = {};
+let lastOrder = -1;
+let allLasts = [];
 
 
-export function setCartData(newData) {
+function setCartData(newData) {
     cartData = newData;
 };

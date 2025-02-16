@@ -1,7 +1,12 @@
+let data = {};
+let indexData = {};
 
-import { data, indexData } from "./store.js"
+export function getStoreIndex(store) {
+    data = store.data;
+    indexData = store.indexData;
+};
 
-let table = new URLSearchParams(window.location.search).get('table')
+let table = new URLSearchParams(window.location.search).get('table');
 if (table) {
     sessionStorage.setItem('table', table)
 };

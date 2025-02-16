@@ -1,5 +1,4 @@
 import { main } from "./main.js";
-import { data, setDishesData, textToId } from "./store.js";
 
 let api = "https://script.google.com/macros/s/AKfycbwTxWnjPptRmIwFxgX7cb9py5zSxJSajGx0KkuGYmO5cXDIxdutWGNsovYPCn9R-7aR/exec";
 let size = 0;

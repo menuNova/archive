@@ -1,5 +1,3 @@
-import { data } from "./store.js";
-
 function getUserData() {
     let date = new Date();
     console.log(navigator.onLine);

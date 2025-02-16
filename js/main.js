@@ -1,12 +1,10 @@
 import { calcTotal, renderCart, renderMenu, renderText } from "./render.js";
 import { sendBot } from './telegram.js';
-import { cartData, data, languageData, lastOrder, payData, setCartData, setLastOrder } from "./store.js";
 import { waitTable } from "./statistics.js";
 
 let isNeedToPay = false;
 let formattedCart = '';
 let userFormattedCart = '';
-let isPayed = false;
 const cartButton = document.querySelector('.nav__cart');
 const cart = document.querySelector('.cart');
 const navTheme = document.querySelector('.nav__theme');
@@ -20,7 +18,6 @@ const popup = document.querySelector('#popup');
 
 const langaData = languageData[data.language];
 const forJsData = langaData.forJs;
-let lastTime = '00:00'
 
 export function main() {
     renderMenu();

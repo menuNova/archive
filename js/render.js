@@ -1,5 +1,4 @@
 import { createPopup } from "./main.js";
-import { data, cartData, languageData, getDishesData, payData } from "./store.js";
 
 let dishesData = getDishesData();
 
