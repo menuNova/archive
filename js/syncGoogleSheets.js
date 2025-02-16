@@ -1,11 +1,11 @@
 import { main } from "./main.js";
 
-let api = "https://script.google.com/macros/s/AKfycbwTxWnjPptRmIwFxgX7cb9py5zSxJSajGx0KkuGYmO5cXDIxdutWGNsovYPCn9R-7aR/exec";
+let api = sheetsData.api;
 let size = 0;
-let maxSize = 30;
+let maxSize = 35;
 
 if (data.xType == 'pro') {
-    maxSize = 50;
+    maxSize = 65;
 } else if (data.xType == 'premium') {
     maxSize = Infinity;
 };
@@ -100,6 +100,8 @@ function processData(dataX) {
         if (size < maxSize) {
             dishData[categoryKey].items.push(dish);
             size++;
+            console.log(size);
+            
             if (item['action-' + data.mainLang] != data.mainMenu) {
                 const actionKey = 'X0-' + textToId(item[`action-${data.mainLang}`]);
                 if (!dishData[actionKey]) dishData[actionKey] = {name: transformItem(item, 'action'), items: []};

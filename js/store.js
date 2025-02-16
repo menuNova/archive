@@ -4,9 +4,13 @@ let data = {
     mainLang: 'ru',
     name: 'Shakespeare',
     languages: ['ru', 'en', 'de'],
-    xType: 'premium', // #DO-BASIC
+    xType: 'basic', // #DO-BASIC
     mainMenu: 'Основное',
 };
+
+let sheetsData = {
+    api: 'https://script.google.com/macros/s/AKfycbwTxWnjPptRmIwFxgX7cb9py5zSxJSajGx0KkuGYmO5cXDIxdutWGNsovYPCn9R-7aR/exec'
+}
 
 let formStore = {
     action: 'https://docs.google.com/forms/u/0/d/e/1FAIpQLSet6GN5udUclBl1MQRWiVSrMkmJrc5FCgMguDMQL-0Xz4fqXw/formResponse',
