@@ -380,11 +380,11 @@ let setLastOrder = function (newLastOrder, isNew = true) {
     if (newLastOrder != 'delete') {
         allLasts.push(lastOrder);
     } else {
-        allLasts = JSON.parse(localStorage.getItem(data.name + '-allLastS'));
+        allLasts = JSON.parse(localStorage.getItem(textToId(data.name) + '-allLastS'));
         lastOrder = allLasts.pop();
     };
-    localStorage.setItem(data.name + '-allLastS', JSON.stringify(allLasts))
-    localStorage.setItem(data.name + '-lastS', JSON.stringify(lastOrder));
+    localStorage.setItem(textToId(data.name) + '-allLastS', JSON.stringify(allLasts))
+    localStorage.setItem(textToId(data.name) + '-lastS', JSON.stringify(lastOrder));
 };
 
 let cartData = {};

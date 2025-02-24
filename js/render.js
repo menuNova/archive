@@ -24,9 +24,9 @@ export function calcTotal(dataDishes = cartData, checkOrder = true) {
             }, 0);
         }, 0);
     }, 0);
-    if (localStorage.getItem(data.name + '-order') && checkOrder) {
+    if (localStorage.getItem(textToId(data.name) + '-order') && checkOrder) {
         dishs = Number(dishs);
-        dishs += Number(calcTotal(JSON.parse(localStorage.getItem(data.name + '-order')).dishes, false));
+        dishs += Number(calcTotal(JSON.parse(localStorage.getItem(textToId(data.name) + '-order')).dishes, false));
     };
     return dishs;
 };
@@ -426,11 +426,11 @@ export function updateMenu(categoryName, dishData, index, portionName, action) {
 
     let cart = {
         dishes: cartData,
-        table: sessionStorage.getItem(data.name + '-table'),
+        table: sessionStorage.getItem(textToId(data.name) + '-table'),
         time: new Date(),
     };
 
-    localStorage.setItem(data.name + '-cart', JSON.stringify(cart));
+    localStorage.setItem(textToId(data.name) + '-cart', JSON.stringify(cart));
 };
 
 function showConfirmationPopup(onConfirm) {

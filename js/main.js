@@ -85,7 +85,7 @@ function mergeCartData(cartData1, cartData2) {
     return [merged, news];
 };
 
-if (!sessionStorage.getItem(data.name + '-table')) {
+if (!sessionStorage.getItem(textToId(data.name) + '-table')) {
     let tablePopup = createPopup(forJsData.chooseTable);
     let div = document.createElement('div');
     div.className = 'popup__number'
@@ -105,7 +105,7 @@ if (!sessionStorage.getItem(data.name + '-table')) {
     let ok = langaData['.popup__button_ok'];
     let buttons = {};
     buttons[ok] = function () {
-        sessionStorage.setItem(data.name + '-table', input.value);
+        sessionStorage.setItem(textToId(data.name) + '-table', input.value);
         tablePopup.closePopup();
     };
 
@@ -149,7 +149,7 @@ let cancel = langaData['.popup__button_cancel'];
 
 if (window.location.pathname.includes('menu-')) {
     let cancelOrderF = function (needToNoff = true, noffPpp = false) {
-        let oldOrder = JSON.parse(localStorage.getItem(data.name + '-order'));
+        let oldOrder = JSON.parse(localStorage.getItem(textToId(data.name) + '-order'));
         let formattedOld = '';
 
 
@@ -169,7 +169,7 @@ if (window.location.pathname.includes('menu-')) {
                 delete oldOrder.dishes[el];
             };
         };
-        localStorage.setItem(data.name + '-order', JSON.stringify(oldOrder));
+        localStorage.setItem(textToId(data.name) + '-order', JSON.stringify(oldOrder));
 
         if (!formattedCart) {
             wrapper.parentNode.classList.add('_hidden');
@@ -177,7 +177,7 @@ if (window.location.pathname.includes('menu-')) {
             order.innerHTML = `False`;
             order.classList.add('hidden');
             sendMenu.innerHTML = langaData['#sendMenu'];
-            localStorage.removeItem(data.name + '-order');
+            localStorage.removeItem(textToId(data.name) + '-order');
             isNeedToPay = false;
         };
         setLastOrder('delete');
@@ -186,7 +186,7 @@ if (window.location.pathname.includes('menu-')) {
         sendBot(`
 <b><u>🔴 ОТМЕНА 🔴</u></b>
 
-Стол N${sessionStorage.getItem(data.name + '-table')} отменил ${formattedCart ? 'обновление' : 'отправку'} заказа.
+Стол N${sessionStorage.getItem(textToId(data.name) + '-table')} отменил ${formattedCart ? 'обновление' : 'отправку'} заказа.
 
 ${formattedCart ? '<b>Текущий заказ:</b>' : ''}
 ${formattedCart}
@@ -200,26 +200,26 @@ ${formattedCart}
 
     };
     let dat = new Date();
-    if (localStorage.getItem(data.name + '-order')) {
-        let orderParse = JSON.parse(localStorage.getItem(data.name + '-order'));
+    if (localStorage.getItem(textToId(data.name) + '-order')) {
+        let orderParse = JSON.parse(localStorage.getItem(textToId(data.name) + '-order'));
         let datDelta = dat - new Date(orderParse.time);
         datDelta = datDelta / (1000 * 60);
-        if (datDelta > (60 * 3) || orderParse.table != sessionStorage.getItem(data.name + '-table')) {
-            localStorage.removeItem(data.name + '-order');
+        if (datDelta > (60 * 3) || orderParse.table != sessionStorage.getItem(textToId(data.name) + '-table')) {
+            localStorage.removeItem(textToId(data.name) + '-order');
         };
     };
-    if (localStorage.getItem(data.name + '-cart')) {
-        let cartParse = JSON.parse(localStorage.getItem(data.name + '-cart'));
+    if (localStorage.getItem(textToId(data.name) + '-cart')) {
+        let cartParse = JSON.parse(localStorage.getItem(textToId(data.name) + '-cart'));
         let datDelta = dat - new Date(cartParse.time);
         datDelta = datDelta / (1000 * 60);
 
-        if (datDelta > (60 * 3) || (datDelta > 60 && !localStorage.getItem(data.name + '-cart')) || cartParse.table != sessionStorage.getItem(data.name + '-table')) {
-            localStorage.removeItem(data.name + '-cart');
+        if (datDelta > (60 * 3) || (datDelta > 60 && !localStorage.getItem(textToId(data.name) + '-cart')) || cartParse.table != sessionStorage.getItem(textToId(data.name) + '-table')) {
+            localStorage.removeItem(textToId(data.name) + '-cart');
         };
     };
 
-    if (localStorage.getItem(data.name + '-order')) {
-        let ord = JSON.parse(localStorage.getItem(data.name + '-order'));
+    if (localStorage.getItem(textToId(data.name) + '-order')) {
+        let ord = JSON.parse(localStorage.getItem(textToId(data.name) + '-order'));
         order.innerHTML = `${forJsData.order} N ${ord.id}`;
         wrapper.innerHTML = ord.formattedUser.split('\n').join('<br/>').split('+==+').join('');
         order.classList.remove('hidden');
@@ -228,11 +228,11 @@ ${formattedCart}
         let times = ord.formatted.split('(')[1].split(')')[0].split(':');
         let time = times[0] + (times[1] / 60)
         sendMenu.innerHTML = forJsData.addToOrder;
-        setLastOrder(JSON.parse(localStorage.getItem(data.name + '-lastS')));
+        setLastOrder(JSON.parse(localStorage.getItem(textToId(data.name) + '-lastS')));
     };
 
-    if (localStorage.getItem(data.name + '-cart')) {
-        let dishesCart = JSON.parse(localStorage.getItem(data.name + '-cart'));
+    if (localStorage.getItem(textToId(data.name) + '-cart')) {
+        let dishesCart = JSON.parse(localStorage.getItem(textToId(data.name) + '-cart'));
         setCartData(dishesCart.dishes)
 
         renderCart();
@@ -289,7 +289,7 @@ ${formattedCart}
             sendBot(`
 <b><u>Вызов официанта</u></b>
 
-Стол N${sessionStorage.getItem(data.name + '-table')} зовёт официанта.`);
+Стол N${sessionStorage.getItem(textToId(data.name) + '-table')} зовёт официанта.`);
             isNeedToPay = true;
             callPopup.closePopup();
             let nofficationPopup = createPopup(forJsData.soonOfficiant);
@@ -299,7 +299,7 @@ ${formattedCart}
                 sendBot(`
 <b><u>🔴 ОТМЕНА 🔴</u></b>
 
-Стол N${sessionStorage.getItem(data.name + '-table')} отменил вызов официанта.
+Стол N${sessionStorage.getItem(textToId(data.name) + '-table')} отменил вызов официанта.
 `);
                 nofficationPopup.closePopup();
                 nofficationPopup = createPopup(forJsData.canceled);
@@ -325,7 +325,7 @@ ${formattedCart}
         let menuPopup = createPopup(forJsData.sureOrder);
         let buttons2 = {};
         buttons2[ok] = function () {
-            let table = sessionStorage.getItem(data.name + '-table') ? sessionStorage.getItem(data.name + '-table') : 'Не определён'
+            let table = sessionStorage.getItem(textToId(data.name) + '-table') ? sessionStorage.getItem(textToId(data.name) + '-table') : 'Не определён'
 
             wrapper.innerHTML = userFormattedCart.split('\n').join('<br/>').split('+==+').join('');
             isNeedToPay = true;
@@ -339,20 +339,20 @@ ${formattedCart}
                 minute: '2-digit',
                 second: '2-digit'
             }).replace(',', '').replace(' ', ' ');
-            let realId = `${orderTime}-${sessionStorage.getItem(data.name + '-table')}`;
+            let realId = `${orderTime}-${sessionStorage.getItem(textToId(data.name) + '-table')}`;
             let oldDishes = '';
             let oldArr = {};
             let oldFormattedUser = '';
             let newCartData = cartData;
 
-            if (!localStorage.getItem(data.name + '-order')) {
-                order.innerHTML = `${forJsData.order} N ${orderTime}-${sessionStorage.getItem(data.name + '-table')}`;
+            if (!localStorage.getItem(textToId(data.name) + '-order')) {
+                order.innerHTML = `${forJsData.order} N ${orderTime}-${sessionStorage.getItem(textToId(data.name) + '-table')}`;
                 order.classList.remove('hidden');
             } else {
-                realId = JSON.parse(localStorage.getItem(data.name + '-order')).id;
-                oldDishes = JSON.parse(localStorage.getItem(data.name + '-order')).formatted + '+==+\n\n';
-                oldArr = JSON.parse(localStorage.getItem(data.name + '-order')).dishes;
-                oldFormattedUser = JSON.parse(localStorage.getItem(data.name + '-order')).formattedUser + '+==+\n\n';
+                realId = JSON.parse(localStorage.getItem(textToId(data.name) + '-order')).id;
+                oldDishes = JSON.parse(localStorage.getItem(textToId(data.name) + '-order')).formatted + '+==+\n\n';
+                oldArr = JSON.parse(localStorage.getItem(textToId(data.name) + '-order')).dishes;
+                oldFormattedUser = JSON.parse(localStorage.getItem(textToId(data.name) + '-order')).formattedUser + '+==+\n\n';
             };
             let newCart = Object.entries(cartData).map(([category, categoryData]) => {
                 const categoryName = categoryData.name[data.mainLang];
@@ -412,13 +412,13 @@ ${(oldDishes + x + newCart).split('+==+').join('')}
                 dishes: newCartData,
                 id: realId,
                 time: localStorage.getItem('order') ? localStorage.getItem('order').time : new Date(),
-                table: sessionStorage.getItem(data.name + '-table'),
+                table: sessionStorage.getItem(textToId(data.name) + '-table'),
                 language: data.language,
                 formatted: formattedCart,
                 formattedUser: userFormattedCart
             };
-            localStorage.setItem(data.name + '-order', JSON.stringify(orderJson));
-            localStorage.setItem(data.name + '-cart', '{}');
+            localStorage.setItem(textToId(data.name) + '-order', JSON.stringify(orderJson));
+            localStorage.setItem(textToId(data.name) + '-cart', '{}');
 
             setCartData({});
             document.querySelector('.dishes').innerHTML = `
@@ -451,13 +451,13 @@ ${(oldDishes + x + newCart).split('+==+').join('')}
         isPayed = true;
         let nofficationPopup = createPopup(forJsData.payOrdered);
         let btns = {};
-        let ord = JSON.parse(localStorage.getItem(data.name + '-order'));
+        let ord = JSON.parse(localStorage.getItem(textToId(data.name) + '-order'));
 
         submitToGoogleForm({
             [formStore['id']]: ord.id,
             [formStore['оплата']]: 'Оплата',
             [formStore['lang']]: data.language,
-            [formStore['table']]: sessionStorage.getItem(data.name + '-table'),
+            [formStore['table']]: sessionStorage.getItem(textToId(data.name) + '-table'),
             [formStore['order']]: ord.formatted.split('+==+').join(''),
             [formStore['sum']]: calcTotal(),
         });
@@ -466,14 +466,14 @@ ${(oldDishes + x + newCart).split('+==+').join('')}
             sendBot(`
 <b><u>🔴 ОТМЕНА 🔴</u></b>
 
-Стол N${sessionStorage.getItem(data.name + '-table')} отменил оплату заказа.
+Стол N${sessionStorage.getItem(textToId(data.name) + '-table')} отменил оплату заказа.
 `);
             nofficationPopup.closePopup();
             nofficationPopup = createPopup(forJsData.canceled);
             nofficationPopup.createButtons();
         };
         nofficationPopup.createButtons(btns);
-        localStorage.removeItem(data.name + '-order')
+        localStorage.removeItem(textToId(data.name) + '-order')
     }
     payOrder.onclick = () => {
         if (!isNeedToPay) {
@@ -488,8 +488,8 @@ ${(oldDishes + x + newCart).split('+==+').join('')}
             sendBot(`
 <b>Оплата заказа</b>
 
-<i>Id: ${JSON.parse(localStorage.getItem(data.name + '-order')).id}</i>
-Стол: ${sessionStorage.getItem(data.name + '-table') ? sessionStorage.getItem(data.name + '-table') : 'Не определён'}
+<i>Id: ${JSON.parse(localStorage.getItem(textToId(data.name) + '-order')).id}</i>
+Стол: ${sessionStorage.getItem(textToId(data.name) + '-table') ? sessionStorage.getItem(textToId(data.name) + '-table') : 'Не определён'}
 Сумма к оплате: ${payData.totalPrice}${data.valute}
 Тип оплаты: Наличными
 <i>Язык: ${data.language}</i>
@@ -502,8 +502,8 @@ ${(oldDishes + x + newCart).split('+==+').join('')}
             sendBot(`
 <b>Оплата заказа</b>
 
-<i>Id: ${JSON.parse(localStorage.getItem(data.name + '-order')).id}</i>
-Стол: ${sessionStorage.getItem(data.name + '-table') ? sessionStorage.getItem(data.name + '-table') : 'Не определён'}
+<i>Id: ${JSON.parse(localStorage.getItem(textToId(data.name) + '-order')).id}</i>
+Стол: ${sessionStorage.getItem(textToId(data.name) + '-table') ? sessionStorage.getItem(textToId(data.name) + '-table') : 'Не определён'}
 Сумма к оплате: ${payData.totalPrice}${data.valute}
 Тип оплаты: Картой
 <i>Язык: ${data.language}</i>
@@ -521,7 +521,7 @@ ${(oldDishes + x + newCart).split('+==+').join('')}
         document.querySelector('.order__wrapper').classList.toggle('_hidden');
     };
     cancelOrder.onclick = function () {
-        let formattedCc = JSON.parse(localStorage.getItem(data.name + '-order')).formatted;
+        let formattedCc = JSON.parse(localStorage.getItem(textToId(data.name) + '-order')).formatted;
         const times = formattedCc.match(/\((\d{1,2}:\d{2})\)/g).map(s => s.slice(1, -1));
         const toMinutes = t => t.split(':').reduce((sum, n, i) => sum + (i === 0 ? +n * 60 : +n), 0);
         const maxTime = times.reduce((a, b) => toMinutes(a) > toMinutes(b) ? a : b);
