@@ -452,15 +452,17 @@ ${(oldDishes + x + newCart).split('+==+').join('')}
         let nofficationPopup = createPopup(forJsData.payOrdered);
         let btns = {};
         let ord = JSON.parse(localStorage.getItem(textToId(data.name) + '-order'));
+        if (data.xType == 'premium') {
+            submitToGoogleForm({
+                [formStore['id']]: ord.id,
+                [formStore['оплата']]: 'Оплата',
+                [formStore['lang']]: data.language,
+                [formStore['table']]: sessionStorage.getItem(textToId(data.name) + '-table'),
+                [formStore['order']]: ord.formatted.split('+==+').join(''),
+                [formStore['sum']]: calcTotal(),
+            });
+        };
 
-        submitToGoogleForm({
-            [formStore['id']]: ord.id,
-            [formStore['оплата']]: 'Оплата',
-            [formStore['lang']]: data.language,
-            [formStore['table']]: sessionStorage.getItem(textToId(data.name) + '-table'),
-            [formStore['order']]: ord.formatted.split('+==+').join(''),
-            [formStore['sum']]: calcTotal(),
-        });
         btns[forJsData.understand] = nofficationPopup.closePopup;
         btns[cancel] = function () {
             sendBot(`
