@@ -28,6 +28,7 @@ export function calcTotal(dataDishes = cartData, checkOrder = true) {
         dishs = Number(dishs);
         dishs += Number(calcTotal(JSON.parse(localStorage.getItem(textToId(data.name) + '-order')).dishes, false));
     };
+    
     return dishs;
 };
 
@@ -278,10 +279,8 @@ export function updateMenu(categoryName, dishData, index, portionName, action) {
         try {
             const item = cartData[categoryName].items.find(item => item.name[data.language] === dishData.name[data.language]);
 
-            let sum = 0;
-            for (let key in item.count) {
-                sum += item.count[key] * item.price[key];
-            };
+            let sum = Object.values(item.count).some(cnt => cnt > 0);
+            
             if (sum > 0) {
                 cardDom.classList.add('_inCart');
             } else {

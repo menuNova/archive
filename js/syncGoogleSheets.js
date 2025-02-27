@@ -100,7 +100,6 @@ function processData(dataX) {
         if (size < maxSize) {
             dishData[categoryKey].items.push(dish);
             size++;
-            console.log(size);
             
             if (item['action-' + data.mainLang] != data.mainMenu && data.xType == 'premium') {
                 const actionKey = 'X0-' + textToId(item[`action-${data.mainLang}`]);

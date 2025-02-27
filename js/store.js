@@ -4,7 +4,7 @@ let data = {
     mainLang: 'ru',
     name: 'Shakespeare',
     languages: ['ru', 'en', 'de'],
-    xType: 'basic', // #DO-BASIC
+    xType: 'pro', // #DO-BASIC
     mainMenu: 'Основное',
 };
 

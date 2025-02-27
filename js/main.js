@@ -476,7 +476,7 @@ ${(oldDishes + x + newCart).split('+==+').join('')}
         };
         nofficationPopup.createButtons(btns);
         localStorage.removeItem(textToId(data.name) + '-order')
-    }
+    };
     payOrder.onclick = () => {
         if (!isNeedToPay) {
             let errPopup = createPopup(forJsData.cantPayOrder);
