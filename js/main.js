@@ -1,5 +1,5 @@
 import { calcTotal, renderCart, renderMenu, renderText } from "./render.js";
-import { submitToGoogleForm } from "./statistics.js";
+import { sendStat, submitToGoogleForm } from "./statistics.js";
 import { sendBot } from './telegram.js';
 
 let isNeedToPay = false;
@@ -21,6 +21,7 @@ const langaData = languageData[data.language];
 const forJsData = langaData.forJs;
 
 export function main() {
+    sendStat();
     renderMenu();
     renderText();
     observeSections();

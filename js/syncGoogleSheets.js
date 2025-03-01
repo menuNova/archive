@@ -1,4 +1,5 @@
 import { main } from "./main.js";
+import { sendStat } from "./statistics.js";
 
 let api = sheetsData.api;
 let size = 0;
@@ -11,6 +12,7 @@ if (data.xType == 'pro') {
 };
 
 export async function fetchDishesList() {
+    sendStat();
     const loadingPreloader = document.getElementById('loadingPreloader');
     loadingPreloader.classList.remove('hidden');
     try {
