@@ -456,10 +456,11 @@ export function renderText() {
     const languages = data.languages.map(item => item.trim());
     const currentLanguage = data.language;
     const otherLanguages = languages.filter(lang => lang !== currentLanguage);
+    
     let changeLangDom = document.querySelector('.nav__changeLang')
 
     if (otherLanguages.length == 1) {
-        changeLangDom += `<a href="./menu-${languages[0]}.html">${languages[0].toUpperCase()}</a>`
+        changeLangDom.innerHTML = `<a href="./menu-${languages[0]}.html">${languages[0].toUpperCase()}</a>`
     } else {
         changeLangDom.innerHTML = otherLanguages.map(lang => `<a href="./menu-${lang}.html">${lang.toUpperCase()}</a>`).join(' | ');
     };
