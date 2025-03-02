@@ -242,6 +242,10 @@ ${formattedCart}
 
     cartButton.onclick = () => {
         cartButton.classList.toggle('_active');
+        console.log(cartButton.childNodes);
+        
+        cartButton.childNodes[1].classList.toggle('fa-arrow-left-long');
+        cartButton.childNodes[1].classList.toggle('fa-cart-shopping');
         cart.classList.toggle('_active');
         document.body.classList.toggle('_whenCart');
     };
@@ -463,6 +467,9 @@ ${(oldDishes + x + newCart).split('+==+').join('')}
                 [formStore['sum']]: calcTotal(),
             });
         };
+        setTimeout(() => {
+            location.reload();
+        }, 3000);
 
         btns[forJsData.understand] = nofficationPopup.closePopup;
         btns[cancel] = function () {
