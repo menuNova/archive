@@ -63,7 +63,7 @@ let languageData = {
             cantPayOrder: 'Вы ещё не сделали заказ, чтобы оплатить его',
             choosePayOrder: 'Выберите способ оплаты:',
             payOrdered: 'Сейчас к вам подойдёт официант и скажет вам код. Введите его ниже:',
-            paySucces: 'Вы успешно оплатили заказ',
+            paySuccess: 'Вы успешно оплатили заказ',
             chooseTable: 'Мы не смогли определить номер вашего стола. Введите его пожалуйста',
             addToOrder: 'Добавить к заказу',
             wrongCode: 'Неверный код. Дождитесь оффицианта - он скажет вам, что вводить'
@@ -101,7 +101,7 @@ let languageData = {
             cantPayOrder: 'You have not yet placed an order to pay for it',
             choosePayOrder: 'Choose a payment method:',
             payOrdered: 'A waiter will come to you now and give you a code. Enter it below:',
-            paySucces: 'You have successfully paid for the order',
+            paySuccess: 'You have successfully paid for the order',
             chooseTable: 'We could not determine your table number. Please enter it',
             addToOrder: 'Add to order',
             wrongCode: 'Wrong code. Wait for the waiter - he will tell you what to enter'
@@ -139,7 +139,7 @@ let languageData = {
             cantPayOrder: 'Sie haben noch keine Bestellung aufgegeben, um sie zu bezahlen',
             choosePayOrder: 'Wählen Sie eine Zahlungsmethode:',
             payOrdered: 'Ein Kellner kommt gleich zu Ihnen und gibt Ihnen einen Code. Geben Sie ihn unten ein:',
-            paySucces: 'Sie haben die Bestellung erfolgreich bezahlt',
+            paySuccess: 'Sie haben die Bestellung erfolgreich bezahlt',
             chooseTable: 'Wir konnten Ihre Tischnummer nicht bestimmen. Bitte geben Sie sie ein',
             addToOrder: 'Zur Bestellung hinzufügen',
             wrongCode: 'Falscher Code. Warten Sie auf den Kellner - er wird Ihnen sagen, was Sie eingeben sollen'

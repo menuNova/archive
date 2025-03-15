@@ -1,6 +1,6 @@
 import { calcTotal, renderCart, renderMenu, renderText } from "./render.js";
 import { sendStat, submitToGoogleForm } from "./statistics.js";
-import { sendBot, sendPro } from './telegram.js';
+import { sendBot } from './telegram.js';
 
 let isNeedToPay = false;
 let formattedCart = '';
@@ -25,14 +25,6 @@ export function main() {
     renderMenu();
     renderText();
     observeSections();
-    alert();
-    sendPro({
-        'message': 'Hi',
-        'callback': (id) => {
-            sendPro({'message': 'Hii', 'reply': id})
-        }
-    })
-
 };
 
 async function sha256(message) {
@@ -272,9 +264,13 @@ ${formattedCart}
         let datDelta = dat - new Date(cartParse.time);
         datDelta = datDelta / (1000 * 60);
 
-        if (datDelta > (60 * 3) || (datDelta > 60 && !localStorage.getItem(textToId(data.name) + '-cart')) || cartParse.table != sessionStorage.getItem(textToId(data.name) + '-table')) {
+        if (datDelta > (60 * 3) || Object.keys(localStorage.getItem(textToId(data.name) + '-cart')) || (datDelta > 60 && !localStorage.getItem(textToId(data.name) + '-cart')) || cartParse.table != sessionStorage.getItem(textToId(data.name) + '-table')) {
             localStorage.removeItem(textToId(data.name) + '-cart');
         };
+    };
+
+    if (localStorage.getItem(textToId(data.name) + '-securi') && ! localStorage.getItem(textToId(data.name) + '-order')) {
+        localStorage.removeItem(textToId(data.name) + '-securi')
     };
 
     if (localStorage.getItem(textToId(data.name) + '-order')) {
@@ -510,22 +506,26 @@ ${(oldDishes + x + newCart).split('+==+').join('')}`);
                             });
                         };
                         localStorage.removeItem(textToId(data.name) + '-order')
-                        setTimeout(() => {
-                            location.reload();
-                        }, 3000);
                         nofficationPopup.closePopup()
                         nofficationPopup = createPopup(forJsData.paySuccess);
                         nofficationPopup.createButtons();
+                        sendBot(`
+Успешная оплата заказа
+
+<i>Id: ${ord.id}</i>
+<b>Стол:</b> ${sessionStorage.getItem(textToId(data.name) + '-table')}
+<b>Сумма к оплате:</b> ${calcTotal()}${data.valute}
+<i>Язык: ${data.language}</i>`)
+                        setTimeout(() => {
+                            location.reload();
+                        }, 3000);
+
                     } else {
                         document.querySelector('.popup__header').innerHTML = forJsData.wrongCode;
                         inp.value = '';
                         inp.focus();
                     };
                 })();
-            },
-            ['Отмена']: function () {
-                nofficationPopup.closePopup();
-                localStorage.removeItem(textToId(data.name) + '-securi')
             }
         });
         document.querySelector('.popup__number').insertBefore(inp, document.querySelector('.popup__number').firstChild);
@@ -550,7 +550,7 @@ ${(oldDishes + x + newCart).split('+==+').join('')}`);
                 localStorage.setItem(textToId(data.name) + '-securi', hash);
             });
             sendBot(`
-<b>Оплата заказа</b>
+<b><u>Оплата заказа</u></b>
 
 <i>Id: ${JSON.parse(localStorage.getItem(textToId(data.name) + '-order')).id}</i>
 Стол: ${sessionStorage.getItem(textToId(data.name) + '-table') ? sessionStorage.getItem(textToId(data.name) + '-table') : 'Не определён'}
@@ -569,7 +569,7 @@ ${(oldDishes + x + newCart).split('+==+').join('')}`);
                 localStorage.setItem(textToId(data.name) + '-securi', hash);
             });
             sendBot(`
-<b>Оплата заказа</b>
+<b><u>Оплата заказа</u></b>
 
 <i>Id: ${JSON.parse(localStorage.getItem(textToId(data.name) + '-order')).id}</i>
 Стол: ${sessionStorage.getItem(textToId(data.name) + '-table') ? sessionStorage.getItem(textToId(data.name) + '-table') : 'Не определён'}
