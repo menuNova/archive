@@ -1,6 +1,6 @@
 import { calcTotal, renderCart, renderMenu, renderText } from "./render.js";
 import { sendStat, submitToGoogleForm } from "./statistics.js";
-import { sendBot } from './telegram.js';
+import { sendBot, sendPro } from './telegram.js';
 
 let isNeedToPay = false;
 let formattedCart = '';
@@ -25,6 +25,58 @@ export function main() {
     renderMenu();
     renderText();
     observeSections();
+    alert();
+    sendPro({
+        'message': 'Hi',
+        'callback': (id) => {
+            sendPro({'message': 'Hii', 'reply': id})
+        }
+    })
+
+};
+
+async function sha256(message) {
+    const msgBuffer = new TextEncoder().encode(message);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashHex;
+};
+
+function formatCart(lang) {
+    console.log(Object.entries(cartData).map(([category, categoryData]) => {
+        const categoryName = categoryData.name[lang];
+        const time = (new Date()).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+        const items = categoryData.items
+            .filter(item => item.count)
+            .map((item, index) => {
+                const itemName = item.name[lang] + ` (${time})`;
+                const sizes = Object.entries(item.count)
+                    .map(([size, count]) => `    ${size} - ${count}`)
+                    .join('\n');
+                return ` ${index + 1}. ${itemName}\n${sizes}`;
+            })
+            .join('\n');
+
+        return `${categoryName}:\n${items}`;
+    }).join('\n\n'));
+    return Object.entries(cartData).map(([category, categoryData]) => {
+        const categoryName = categoryData.name[lang];
+        const time = (new Date()).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+        const items = categoryData.items
+            .filter(item => item.count)
+            .map((item, index) => {
+                const itemName = item.name[lang] + ` (${time})`;
+                const sizes = Object.entries(item.count)
+                    .map(([size, count]) => `    ${size} - ${count}`)
+                    .join('\n');
+                return ` ${index + 1}. ${itemName}\n${sizes}`;
+            })
+            .join('\n');
+
+        return `${categoryName}:\n${items}`;
+    }).join('\n\n');
+
 };
 
 let popupOpened = false;
@@ -50,7 +102,12 @@ export function createPopup(header) {
             let buttonNode = document.createElement('button');
             buttonNode.innerHTML = key;
             buttonNode.onclick = buttons[key];
-            popup.querySelector('.popup__btns').appendChild(buttonNode);
+            if (key.includes('fa-circle-right')) {
+                let div = document.createElement('div');
+                div.className = 'popup__number';
+                document.querySelector('.popup__btns').insertBefore(div, document.querySelector('.popup__btns').firstChild);
+                popup.querySelector('.popup__number').appendChild(buttonNode);
+            } else popup.querySelector('.popup__btns').appendChild(buttonNode);
         });
     };
 
@@ -182,7 +239,7 @@ if (window.location.pathname.includes('menu-')) {
             isNeedToPay = false;
         };
         setLastOrder('delete');
-        wrapper.innerHTML = formattedOld.split('\n').join('<br/>').split('+==+').join('');
+        wrapper.innerHTML = formattedOld.split('\n').join('<br/>').split('+==+').join('') + `\n${forJsData.total}: ${calcTotal()}${data.valute}`;
 
         sendBot(`
 <b><u>🔴 ОТМЕНА 🔴</u></b>
@@ -201,6 +258,7 @@ ${formattedCart}
 
     };
     let dat = new Date();
+    // --- Local check ---
     if (localStorage.getItem(textToId(data.name) + '-order')) {
         let orderParse = JSON.parse(localStorage.getItem(textToId(data.name) + '-order'));
         let datDelta = dat - new Date(orderParse.time);
@@ -221,8 +279,8 @@ ${formattedCart}
 
     if (localStorage.getItem(textToId(data.name) + '-order')) {
         let ord = JSON.parse(localStorage.getItem(textToId(data.name) + '-order'));
-        order.innerHTML = `${forJsData.order} N ${ord.id}`;
-        wrapper.innerHTML = ord.formattedUser.split('\n').join('<br/>').split('+==+').join('');
+        order.innerHTML = `${langaData['#orderTitle']} N ${ord.id}`;
+        wrapper.innerHTML = ord.formattedUser.split('\n').join('<br/>').split('+==+').join('') + `\n${forJsData.total}: ${calcTotal()}${data.valute}`;
         order.classList.remove('hidden');
         cancelOrder.classList.remove('hidden');
         isNeedToPay = true;
@@ -239,11 +297,15 @@ ${formattedCart}
         renderCart();
     };
 
+    if (localStorage.getItem(textToId(data.name) + '-securi')) {
+        noffPay();
+    };
+
 
     cartButton.onclick = () => {
         cartButton.classList.toggle('_active');
         console.log(cartButton.childNodes);
-        
+
         cartButton.childNodes[1].classList.toggle('fa-arrow-left-long');
         cartButton.childNodes[1].classList.toggle('fa-cart-shopping');
         cart.classList.toggle('_active');
@@ -332,7 +394,7 @@ ${formattedCart}
         buttons2[ok] = function () {
             let table = sessionStorage.getItem(textToId(data.name) + '-table') ? sessionStorage.getItem(textToId(data.name) + '-table') : 'Не определён'
 
-            wrapper.innerHTML = userFormattedCart.split('\n').join('<br/>').split('+==+').join('');
+            wrapper.innerHTML = userFormattedCart.split('\n').join('<br/>').split('+==+').join('') + `\n${forJsData.total}: ${calcTotal()}${data.valute}`;
             isNeedToPay = true;
             menuPopup.closePopup();
             let nofficationPopup = createPopup(forJsData.orderSended);
@@ -351,7 +413,7 @@ ${formattedCart}
             let newCartData = cartData;
 
             if (!localStorage.getItem(textToId(data.name) + '-order')) {
-                order.innerHTML = `${forJsData.order} N ${orderTime}-${sessionStorage.getItem(textToId(data.name) + '-table')}`;
+                order.innerHTML = `${langaData['#orderTitle']} N ${orderTime}-${sessionStorage.getItem(textToId(data.name) + '-table')}`;
                 order.classList.remove('hidden');
             } else {
                 realId = JSON.parse(localStorage.getItem(textToId(data.name) + '-order')).id;
@@ -359,22 +421,7 @@ ${formattedCart}
                 oldArr = JSON.parse(localStorage.getItem(textToId(data.name) + '-order')).dishes;
                 oldFormattedUser = JSON.parse(localStorage.getItem(textToId(data.name) + '-order')).formattedUser + '+==+\n\n';
             };
-            let newCart = Object.entries(cartData).map(([category, categoryData]) => {
-                const categoryName = categoryData.name[data.mainLang];
-                const time = (new Date()).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-                const items = categoryData.items
-                    .filter(item => item.count)
-                    .map((item, index) => {
-                        const itemName = item.name[data.mainLang] + ` (${time})`;
-                        const sizes = Object.entries(item.count)
-                            .map(([size, count]) => `    ${size} - ${count}`)
-                            .join('\n');
-                        return ` ${index + 1}. ${itemName}\n${sizes}`;
-                    })
-                    .join('\n');
-
-                return `${categoryName}:\n${items}`;
-            }).join('\n\n');
+            let newCart = formatCart(data.mainLang);
             let x = oldDishes ? '🟢 + == + 🟢 \n' : '';
             sendBot(`
 <b><u>${x ? 'Добавлено к заказу' : 'Заказ'}</u></b>
@@ -382,26 +429,10 @@ ${formattedCart}
 <i>Id: ${realId}</i>
 Стол: ${table}
 Язык: ${data.language}
+Итого: ${calcTotal()}${data.valute}
 
-${(oldDishes + x + newCart).split('+==+').join('')}
-
-Итого: ${calcTotal()}${data.valute}`);
-            let newUserCart = Object.entries(cartData).map(([category, categoryData]) => {
-                const categoryName = categoryData.name[data.language];
-                const time = (new Date()).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-                const items = categoryData.items
-                    .filter(item => item.count)
-                    .map((item, index) => {
-                        const itemName = item.name[data.language] + ` (${time})`;
-                        const sizes = Object.entries(item.count)
-                            .map(([size, count]) => `    ${size} - ${count}`)
-                            .join('\n');
-                        return ` ${index + 1}. ${itemName}\n${sizes}`;
-                    })
-                    .join('\n');
-
-                return `${categoryName}:\n${items}`;
-            }).join('\n\n');
+${(oldDishes + x + newCart).split('+==+').join('')}`);
+            let newUserCart = formatCart(data.language)
             let lastKeys = '0';
             if (oldArr) {
                 [newCartData, lastKeys] = mergeCartData(oldArr, cartData);
@@ -420,7 +451,8 @@ ${(oldDishes + x + newCart).split('+==+').join('')}
                 table: sessionStorage.getItem(textToId(data.name) + '-table'),
                 language: data.language,
                 formatted: formattedCart,
-                formattedUser: userFormattedCart
+                formattedUser: userFormattedCart,
+                total: calcTotal()
             };
             localStorage.setItem(textToId(data.name) + '-order', JSON.stringify(orderJson));
             localStorage.setItem(textToId(data.name) + '-cart', '{}');
@@ -436,7 +468,7 @@ ${(oldDishes + x + newCart).split('+==+').join('')}
 
 
             sendMenu.innerHTML = forJsData.addToOrder;
-            wrapper.innerHTML = userFormattedCart.split('\n').join('<br/>').split('+==+').join('');
+            wrapper.innerHTML = userFormattedCart.split('\n').join('<br/>').split('+==+').join('') + `\n${forJsData.total}: ${calcTotal()}${data.valute}`;
 
             btns[forJsData.understand] = nofficationPopup.closePopup;
             btns[cancel] = () => { cancelOrderF(true, nofficationPopup) };
@@ -453,37 +485,53 @@ ${(oldDishes + x + newCart).split('+==+').join('')}
         menuPopup.createButtons(buttons2)
     };
     function noffPay() {
-        isPayed = true;
         let nofficationPopup = createPopup(forJsData.payOrdered);
-        let btns = {};
-        let ord = JSON.parse(localStorage.getItem(textToId(data.name) + '-order'));
-        if (data.xType == 'premium') {
-            submitToGoogleForm({
-                [formStore['id']]: ord.id,
-                [formStore['оплата']]: 'Оплата',
-                [formStore['lang']]: data.language,
-                [formStore['table']]: sessionStorage.getItem(textToId(data.name) + '-table'),
-                [formStore['order']]: ord.formatted.split('+==+').join(''),
-                [formStore['sum']]: calcTotal(),
-            });
-        };
-        setTimeout(() => {
-            location.reload();
-        }, 3000);
 
-        btns[forJsData.understand] = nofficationPopup.closePopup;
-        btns[cancel] = function () {
-            sendBot(`
-<b><u>🔴 ОТМЕНА 🔴</u></b>
+        let inp = document.createElement('input');
+        inp.min = 1;
+        inp.step = 1;
+        inp.max = 999;
+        inp.type = 'number';
+        nofficationPopup.createButtons({
+            ['<i class="fa-regular fa-circle-right"></i>']: function () {
+                (async function () {
+                    if (await sha256(inp.value) == localStorage.getItem(textToId(data.name) + '-securi')) {
+                        localStorage.removeItem(textToId(data.name) + '-securi');
+                        isPayed = true;
+                        let ord = JSON.parse(localStorage.getItem(textToId(data.name) + '-order'));
+                        if (data.xType == 'premium') {
+                            submitToGoogleForm({
+                                [formStore['id']]: ord.id,
+                                [formStore['оплата']]: 'Оплата',
+                                [formStore['lang']]: data.language,
+                                [formStore['table']]: sessionStorage.getItem(textToId(data.name) + '-table'),
+                                [formStore['order']]: ord.formatted.split('+==+').join(''),
+                                [formStore['sum']]: calcTotal(),
+                            });
+                        };
+                        localStorage.removeItem(textToId(data.name) + '-order')
+                        setTimeout(() => {
+                            location.reload();
+                        }, 3000);
+                        nofficationPopup.closePopup()
+                        nofficationPopup = createPopup(forJsData.paySuccess);
+                        nofficationPopup.createButtons();
+                    } else {
+                        document.querySelector('.popup__header').innerHTML = forJsData.wrongCode;
+                        inp.value = '';
+                        inp.focus();
+                    };
+                })();
+            },
+            ['Отмена']: function () {
+                nofficationPopup.closePopup();
+                localStorage.removeItem(textToId(data.name) + '-securi')
+            }
+        });
+        document.querySelector('.popup__number').insertBefore(inp, document.querySelector('.popup__number').firstChild);
 
-Стол N${sessionStorage.getItem(textToId(data.name) + '-table')} отменил оплату заказа.
-`);
-            nofficationPopup.closePopup();
-            nofficationPopup = createPopup(forJsData.canceled);
-            nofficationPopup.createButtons();
-        };
-        nofficationPopup.createButtons(btns);
-        localStorage.removeItem(textToId(data.name) + '-order')
+
+
     };
     payOrder.onclick = () => {
         if (!isNeedToPay) {
@@ -493,15 +541,22 @@ ${(oldDishes + x + newCart).split('+==+').join('')}
         };
         let payPopup = createPopup(forJsData.choosePayOrder);
         let buttons = {};
-        buttons[forJsData.cashes] = function () {
 
+
+
+        buttons[forJsData.cashes] = function () {
+            const randomValue = Math.floor(Math.random() * 949 + 50).toString();
+            sha256(randomValue).then(hash => {
+                localStorage.setItem(textToId(data.name) + '-securi', hash);
+            });
             sendBot(`
 <b>Оплата заказа</b>
 
 <i>Id: ${JSON.parse(localStorage.getItem(textToId(data.name) + '-order')).id}</i>
 Стол: ${sessionStorage.getItem(textToId(data.name) + '-table') ? sessionStorage.getItem(textToId(data.name) + '-table') : 'Не определён'}
-Сумма к оплате: ${payData.totalPrice}${data.valute}
+Сумма к оплате: ${JSON.parse(localStorage.getItem(textToId(data.name) + '-order')).total}${data.valute}
 Тип оплаты: Наличными
+Код: ${randomValue}
 <i>Язык: ${data.language}</i>
                 `);
             payPopup.closePopup();
@@ -509,13 +564,18 @@ ${(oldDishes + x + newCart).split('+==+').join('')}
         };
 
         buttons[forJsData.cards] = function () {
+            const randomValue = Math.floor(Math.random() * 949 + 50).toString();
+            sha256(randomValue).then(hash => {
+                localStorage.setItem(textToId(data.name) + '-securi', hash);
+            });
             sendBot(`
 <b>Оплата заказа</b>
 
 <i>Id: ${JSON.parse(localStorage.getItem(textToId(data.name) + '-order')).id}</i>
 Стол: ${sessionStorage.getItem(textToId(data.name) + '-table') ? sessionStorage.getItem(textToId(data.name) + '-table') : 'Не определён'}
-Сумма к оплате: ${payData.totalPrice}${data.valute}
+Сумма к оплате: ${JSON.parse(localStorage.getItem(textToId(data.name) + '-order')).total}${data.valute}
 Тип оплаты: Картой
+Код: ${randomValue}
 <i>Язык: ${data.language}</i>
                 `);
             payPopup.closePopup();

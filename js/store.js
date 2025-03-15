@@ -62,9 +62,11 @@ let languageData = {
             cantSendOrder: 'Вы не можете отправить заказ с пустой корзиной, но можете нажать кнопку "Позвать официанта"',
             cantPayOrder: 'Вы ещё не сделали заказ, чтобы оплатить его',
             choosePayOrder: 'Выберите способ оплаты:',
-            payOrdered: 'Сейчас к вам подойдёт официант',
+            payOrdered: 'Сейчас к вам подойдёт официант и скажет вам код. Введите его ниже:',
+            paySucces: 'Вы успешно оплатили заказ',
             chooseTable: 'Мы не смогли определить номер вашего стола. Введите его пожалуйста',
-            addToOrder: 'Добавить к заказу'
+            addToOrder: 'Добавить к заказу',
+            wrongCode: 'Неверный код. Дождитесь оффицианта - он скажет вам, что вводить'
         },
         '#payOrder': 'Оплатить заказ',
     },
@@ -98,9 +100,11 @@ let languageData = {
             cantSendOrder: 'You cannot send an order with an empty cart, but you can press the "Call the waiter" button',
             cantPayOrder: 'You have not yet placed an order to pay for it',
             choosePayOrder: 'Choose a payment method:',
-            payOrdered: 'A waiter will come to you now',
+            payOrdered: 'A waiter will come to you now and give you a code. Enter it below:',
+            paySucces: 'You have successfully paid for the order',
             chooseTable: 'We could not determine your table number. Please enter it',
-            addToOrder: 'Add to order'
+            addToOrder: 'Add to order',
+            wrongCode: 'Wrong code. Wait for the waiter - he will tell you what to enter'
         },
         '#payOrder': 'Pay Order',
     },
@@ -134,9 +138,11 @@ let languageData = {
             cantSendOrder: 'Sie können keine Bestellung mit einem leeren Warenkorb senden, aber Sie können die Schaltfläche "Kellner rufen" drücken',
             cantPayOrder: 'Sie haben noch keine Bestellung aufgegeben, um sie zu bezahlen',
             choosePayOrder: 'Wählen Sie eine Zahlungsmethode:',
-            payOrdered: 'Ein Kellner kommt gleich zu Ihnen',
+            payOrdered: 'Ein Kellner kommt gleich zu Ihnen und gibt Ihnen einen Code. Geben Sie ihn unten ein:',
+            paySucces: 'Sie haben die Bestellung erfolgreich bezahlt',
             chooseTable: 'Wir konnten Ihre Tischnummer nicht bestimmen. Bitte geben Sie sie ein',
-            addToOrder: 'Zur Bestellung hinzufügen'
+            addToOrder: 'Zur Bestellung hinzufügen',
+            wrongCode: 'Falscher Code. Warten Sie auf den Kellner - er wird Ihnen sagen, was Sie eingeben sollen'
         },
         '#payOrder': 'Zahlung machen',
     },
