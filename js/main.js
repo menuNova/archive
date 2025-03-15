@@ -255,10 +255,11 @@ ${formattedCart}
         let orderParse = JSON.parse(localStorage.getItem(textToId(data.name) + '-order'));
         let datDelta = dat - new Date(orderParse.time);
         datDelta = datDelta / (1000 * 60);
-        if (datDelta > (60 * 3) || orderParse.table != sessionStorage.getItem(textToId(data.name) + '-table')) {
+        if (datDelta > 12 || orderParse.table != sessionStorage.getItem(textToId(data.name) + '-table')) {
             localStorage.removeItem(textToId(data.name) + '-order');
         };
     };
+
     if (localStorage.getItem(textToId(data.name) + '-cart')) {
         let cartParse = JSON.parse(localStorage.getItem(textToId(data.name) + '-cart'));
         let datDelta = dat - new Date(cartParse.time);
