@@ -1,6 +1,6 @@
 let languageData = {
     ru: {
-        'title': 'Меню | ' + data.name,
+        'title': 'Меню',
         '#menuTitle': 'Меню',
         '#orderTitle': 'Ваш заказ',
         '#callOfficiant': 'Вызвать официанта',
@@ -38,7 +38,7 @@ let languageData = {
         '#payOrder': 'Оплатить заказ',
     },
     en: {
-        'title': 'Menu | ' + data.name,
+        'title': 'Menu',
         '#menuTitle': 'Menu',
         '#orderTitle': 'Your Order',
         '#callOfficiant': 'Call the waiter',
@@ -76,7 +76,7 @@ let languageData = {
         '#payOrder': 'Pay Order',
     },
     de: {
-        'title': 'Menü | ' + data.name,
+        'title': 'Menu',
         '#menuTitle': 'Menü',
         '#orderTitle': 'Ihre Bestellung',
         '#callOfficiant': 'Kellner rufen',
