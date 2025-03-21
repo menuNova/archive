@@ -132,6 +132,7 @@ function mergeCartData(cartData1, cartData2) {
 if (!sessionStorage.getItem(textToId(data.name) + '-table')) {
     let tablePopup = createPopup(forJsData.chooseTable);
     let div = document.createElement('div');
+    document.body.classList.add('_whenCart');
     div.className = 'popup__number'
     div.innerHTML = `
 <button id="popupMinus">-</button>
@@ -151,10 +152,12 @@ if (!sessionStorage.getItem(textToId(data.name) + '-table')) {
     buttons[ok] = function () {
         sessionStorage.setItem(textToId(data.name) + '-table', input.value);
         tablePopup.closePopup();
+        document.body.classList.add('_whenCart');
     };
 
     tablePopup.createButtons(buttons);
     popup.querySelector('.popup__btns').insertBefore(div, popup.querySelector('.popup__btns').firstChild);
+    input.focus();
 };
 
 
