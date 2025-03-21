@@ -103,12 +103,6 @@ export function createPopup(header) {
         });
     };
 
-    setTimeout(() => {
-        if (popupOpened) {
-            popupProps.closePopup();
-        }
-    }, 60000);
-
     return popupProps;
 };
 
@@ -457,7 +451,6 @@ ${(oldDishes + x + newCart).split('+==+').join('')}`);
             wrapper.innerHTML = userFormattedCart.split('\n').join('<br/>').split('+==+').join('') + `\n${forJsData.total}: ${calcTotal()}${data.valute}`;
 
             btns[forJsData.understand] = nofficationPopup.closePopup;
-            btns[cancel] = () => { cancelOrderF(true, nofficationPopup) };
             cancelOrder.classList.remove('hidden');
 
             nofficationPopup.createButtons(btns);
