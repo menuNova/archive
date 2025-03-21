@@ -247,7 +247,9 @@ export function renderCart() {
 };
 
 export function updateMenu(categoryName, dishData, index, portionName, action) {
-    if (!cartData[categoryName]) {
+    if (!cartData[categoryName] && action === 'remove') {
+        return;
+    } else if (!cartData[categoryName]) {
         cartData[categoryName] = { items: [], name: dishesData[categoryName].name };
     };
     const input = document.querySelector(`input[data-category="${categoryName}"][data-index="${index}"][data-size="${portionName}"]`);
@@ -428,6 +430,10 @@ export function updateMenu(categoryName, dishData, index, portionName, action) {
         table: sessionStorage.getItem(textToId(data.name) + '-table'),
         time: new Date(),
     };
+    
+    if (Object.keys(cartData).length > 0) document.querySelector('.nav__cart').classList.add('_notEmpty')
+    else document.querySelector('.nav__cart').classList.remove('_notEmpty')
+    
 
     localStorage.setItem(textToId(data.name) + '-cart', JSON.stringify(cart));
 };

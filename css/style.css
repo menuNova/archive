@@ -107,3 +107,15 @@ hr {
     color: var(--color1);
     transform: scale(1.1);
 }
+
+
+.nav__cart._notEmpty > i::after {
+    content: "";
+    position: absolute;
+    bottom: 10px;
+    right: 18px;
+    width: 8px;
+    height: 8px;
+    background: var(--color4);
+    border-radius: 50%;
+}
