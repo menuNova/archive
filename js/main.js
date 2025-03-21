@@ -354,21 +354,10 @@ ${formattedCart}
 <b><u>Вызов официанта</u></b>
 
 Стол N${sessionStorage.getItem(textToId(data.name) + '-table')} зовёт официанта.`);
-            isNeedToPay = true;
             callPopup.closePopup();
             let nofficationPopup = createPopup(forJsData.soonOfficiant);
             let btns = {};
             btns[forJsData.understand] = nofficationPopup.closePopup;
-            btns[cancel] = function () {
-                sendBot(`
-<b><u>🔴 ОТМЕНА 🔴</u></b>
-
-Стол N${sessionStorage.getItem(textToId(data.name) + '-table')} отменил вызов официанта.
-`);
-                nofficationPopup.closePopup();
-                nofficationPopup = createPopup(forJsData.canceled);
-                nofficationPopup.createButtons();
-            };
             nofficationPopup.createButtons(btns);
         };
         buttons[cancel] = callPopup.closePopup;
@@ -540,6 +529,7 @@ ${(oldDishes + x + newCart).split('+==+').join('')}`);
             errPopup.createButtons();
             return;
         };
+        
         let payPopup = createPopup(forJsData.choosePayOrder);
         let buttons = {};
 
